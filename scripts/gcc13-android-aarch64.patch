@@ -1,0 +1,149 @@
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index e084f0831..e43c8c701 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1177,10 +1177,11 @@ aarch64*-*-netbsd*)
+ 	extra_options="${extra_options} netbsd.opt netbsd-elf.opt"
+ 	;;
+ aarch64*-*-linux*)
+-	tm_file="${tm_file} elfos.h gnu-user.h linux.h glibc-stdint.h"
++	tm_file="${tm_file} elfos.h gnu-user.h linux.h linux-android.h glibc-stdint.h"
+ 	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-errata.h aarch64/aarch64-linux.h"
+ 	tmake_file="${tmake_file} aarch64/t-aarch64 aarch64/t-aarch64-linux"
+ 	tm_defines="${tm_defines}  TARGET_DEFAULT_ASYNC_UNWIND_TABLES=1"
++	extra_options="${extra_options} linux-android.opt"
+ 	case $target in
+ 	aarch64_be-*)
+ 		tm_defines="${tm_defines} TARGET_BIG_ENDIAN_DEFAULT=1"
+diff --git a/gcc/config/aarch64/aarch64-linux.h b/gcc/config/aarch64/aarch64-linux.h
+index 4277f03da..b8f4a9026 100644
+--- a/gcc/config/aarch64/aarch64-linux.h
++++ b/gcc/config/aarch64/aarch64-linux.h
+@@ -26,6 +26,9 @@
+ #undef MUSL_DYNAMIC_LINKER
+ #define MUSL_DYNAMIC_LINKER "/lib/ld-musl-aarch64%{mbig-endian:_be}%{mabi=ilp32:_ilp32}.so.1"
+ 
++#undef BIONIC_DYNAMIC_LINKER
++#define BIONIC_DYNAMIC_LINKER "/system/bin/linker64"
++
+ #undef  ASAN_CC1_SPEC
+ #define ASAN_CC1_SPEC "%{%:sanitize(address):-funwind-tables}"
+ 
+@@ -46,11 +49,48 @@
+    %{mbig-endian:-EB} %{mlittle-endian:-EL}     \
+    -maarch64linux%{mabi=ilp32:32}%{mbig-endian:b}"
+ 
+-
+-#define LINK_SPEC LINUX_TARGET_LINK_SPEC AARCH64_ERRATA_LINK_SPEC
+-
+ #define GNU_USER_TARGET_MATHFILE_SPEC \
+   "%{Ofast|ffast-math|funsafe-math-optimizations:%{!shared:crtfastmath.o%s}}"
++  
++#if defined(TARGET_ANDROID)
++
++#define EXTRA_TARGET_D_OS_VERSIONS()                           \
++  ANDROID_TARGET_D_OS_VERSIONS();
++
++#define LINK_SPEC      LINUX_TARGET_LINK_SPEC AARCH64_ERRATA_LINK_SPEC ANDROID_LINK_SPEC
++
++#undef  SUBTARGET_CC1_SPEC
++#define SUBTARGET_CC1_SPEC                                             \
++  LINUX_OR_ANDROID_CC (GNU_USER_TARGET_CC1_SPEC,                       \
++                      GNU_USER_TARGET_CC1_SPEC " " ANDROID_CC1_SPEC)
++
++#undef  LIB_SPEC
++#define LIB_SPEC                                                       \
++  LINUX_OR_ANDROID_LD (GNU_USER_TARGET_LIB_SPEC,                       \
++                   GNU_USER_TARGET_NO_PTHREADS_LIB_SPEC " " ANDROID_LIB_SPEC)
++
++#undef  STARTFILE_SPEC
++#define STARTFILE_SPEC                                                 \
++  LINUX_OR_ANDROID_LD (GNU_USER_TARGET_STARTFILE_SPEC, ANDROID_STARTFILE_SPEC)
++
++#undef  ENDFILE_SPEC
++#define ENDFILE_SPEC                                                   \
++  LINUX_OR_ANDROID_LD (GNU_USER_TARGET_MATHFILE_SPEC " "               \
++                      GNU_USER_TARGET_ENDFILE_SPEC,                    \
++                      GNU_USER_TARGET_MATHFILE_SPEC " "                \
++                      ANDROID_ENDFILE_SPEC)
++
++#define TARGET_OS_CPP_BUILTINS()               \
++  do                                           \
++    {                                          \
++       GNU_USER_TARGET_OS_CPP_BUILTINS();      \
++  ANDROID_TARGET_OS_CPP_BUILTINS();            \
++    }                                          \
++  while (0)
++
++#else
++
++#define LINK_SPEC LINUX_TARGET_LINK_SPEC AARCH64_ERRATA_LINK_SPEC
+ 
+ #undef ENDFILE_SPEC
+ #define ENDFILE_SPEC   \
+@@ -64,6 +104,8 @@
+     }						\
+   while (0)
+ 
++#endif
++
+ #define TARGET_ASM_FILE_END aarch64_file_end_indicate_exec_stack
+ 
+ /* Uninitialized common symbols in non-PIE executables, even with
+diff --git a/libstdc++-v3/config/os/bionic/ctype_base.h b/libstdc++-v3/config/os/bionic/ctype_base.h
+index 2fc0531f4..89e709e99 100644
+--- a/libstdc++-v3/config/os/bionic/ctype_base.h
++++ b/libstdc++-v3/config/os/bionic/ctype_base.h
+@@ -27,6 +27,19 @@
+ //
+ 
+ // Information as gleaned from /usr/include/ctype.h
++// Define macros by ourselves so we do not get into more troubles.
++#define _GLIBCXX_U 0x01
++#define _GLIBCXX_L 0x02
++#define _GLIBCXX_D 0x04
++#define _GLIBCXX_S 0x08
++#define _GLIBCXX_P 0x10
++#define _GLIBCXX_C 0x20
++#define _GLIBCXX_X 0x40
++#define _GLIBCXX_B 0x80
++#define _GLIBCXX_R (_GLIBCXX_P|_GLIBCXX_U|\
++		    _GLIBCXX_L|_GLIBCXX_D|_GLIBCXX_B)
++#define _GLIBCXX_A (_GLIBCXX_L|_GLIBCXX_U)
++#define _GLIBCXX_N _GLIBCXX_D
+ 
+ namespace std _GLIBCXX_VISIBILITY(default)
+ {
+@@ -41,20 +54,19 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+     // NB: Offsets into ctype<char>::_M_table force a particular size
+     // on the mask type. Because of this, we don't use an enum.
+     typedef char 		mask;
+-    static const mask upper    	= _U;
+-    static const mask lower 	= _L;
+-    static const mask alpha 	= _U | _L;
+-    static const mask digit 	= _N;
+-    static const mask xdigit 	= _X | _N;
+-    static const mask space 	= _S;
+-    static const mask print 	= _P | _U | _L | _N | _B;
+-    static const mask graph 	= _P | _U | _L | _N;
+-    static const mask cntrl 	= _C;
+-    static const mask punct 	= _P;
+-    static const mask alnum 	= _U | _L | _N;
+-#if __cplusplus >= 201103L
++    static const mask upper 	= _GLIBCXX_U;
++    static const mask lower 	= _GLIBCXX_L;
++    static const mask alpha 	= _GLIBCXX_A;
++    static const mask digit 	= _GLIBCXX_N;
++    static const mask xdigit	= _GLIBCXX_X | _GLIBCXX_N;
++    static const mask space 	= _GLIBCXX_S;
++    static const mask print 	= _GLIBCXX_R;
++    static const mask graph 	= _GLIBCXX_P | _GLIBCXX_U |
++				  _GLIBCXX_L | _GLIBCXX_N;
++    static const mask cntrl 	= _GLIBCXX_C;
++    static const mask punct 	= _GLIBCXX_P;
++    static const mask alnum 	= _GLIBCXX_A | _GLIBCXX_N;
+     static const mask blank 	= space;
+-#endif
+   };
+ 
+ _GLIBCXX_END_NAMESPACE_VERSION
