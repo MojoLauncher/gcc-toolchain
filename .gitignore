@@ -1,6 +1,6 @@
-gcc-*
-gmp-*
-isl-*
-mpc-*
-mpfr-*
-*.tar.xz
+/gcc-*
+/gmp-*
+/isl-*
+/mpc-*
+/mpfr-*
+/*.tar.xz
