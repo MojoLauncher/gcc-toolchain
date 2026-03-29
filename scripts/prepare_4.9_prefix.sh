@@ -20,6 +20,14 @@ if [[ "$ARCH" == "arm64" || "$ARCH" == "x86_64" ]]; then
   fi
 fi
 
+if [[ "$ARCH" == "arm64" ]]; then
+   export TC_NDK_PATH=aarch64-linux-android
+elif [[ "$ARCH" == "arm" ]]; then
+   export TC_NDK_PATH=arm-linux-androideabi
+else
+   export TC_NDK_PATH=$ARCH
+fi
+
 export TC_PATH=/tmp/toolchain-$ARCH
 export TC_SYSROOT=$TC_PATH/sysroot
 
@@ -29,7 +37,7 @@ mkdir $TC_PATH
 mkdir $TC_SYSROOT
 
 # use binutils and gcc sysroot/startfiles from 4.9
-cp -a $ANDROID_NDK/toolchains/$TRIPLET-4.9/prebuilt/linux-x86_64/* $TC_PATH
+cp -a $ANDROID_NDK/toolchains/$TC_NDK_PATH-4.9/prebuilt/linux-x86_64/* $TC_PATH
 cp -a $ANDROID_NDK/platforms/android-$TARGET_SDK/arch-$ARCH/* $TC_SYSROOT
 
 # libstdc++_v3 expects a syscall.h header in the include root, and this symlink works well enough
