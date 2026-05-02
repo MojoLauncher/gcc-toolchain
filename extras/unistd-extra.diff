@@ -1,0 +1,10 @@
+diff --git a/usr/include/unistd_old.h b/usr/include/unistd.h
+index 86f352b..aca3795 100644
+--- a/usr/include/unistd_old.h
++++ b/usr/include/unistd.h
+@@ -210,3 +210,5 @@ extern int setdomainname(const char *, size_t);
+ __END_DECLS
+ 
+ #endif /* _UNISTD_H_ */
++
++#include <unistd-extra.h>

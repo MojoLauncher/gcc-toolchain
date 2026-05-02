@@ -40,5 +40,13 @@ mkdir $TC_SYSROOT
 cp -a $ANDROID_NDK/toolchains/$TC_NDK_PATH-4.9/prebuilt/linux-x86_64/* $TC_PATH
 cp -a $ANDROID_NDK/platforms/android-$TARGET_SDK/arch-$ARCH/* $TC_SYSROOT
 
+if [[ "$ARCH" == "arm" && "$TARGET_SDK" == "9" ]]; then
+   export EXTRASDIR=$(realpath extras)
+   cp extras/unistd-extra.h $TC_SYSROOT/usr/include/
+   pushd $TC_SYSROOT
+      patch -p1 < $EXTRASDIR/unistd-extra.diff
+   popd
+fi
+
 # libstdc++_v3 expects a syscall.h header in the include root, and this symlink works well enough
 ln -s $TC_SYSROOT/usr/include/sys/syscall.h $TC_SYSROOT/usr/include/syscall.h
