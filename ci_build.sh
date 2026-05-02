@@ -20,7 +20,7 @@ build_single_arch() {
       rm -rf gcc-13/build-gcc
    fi
 
-   ./scripts/prepare-4.9-prefix.sh
+   ./scripts/prepare_4.9_prefix.sh
    ./scripts/build-gcc13.sh
 
    pushd $CI_TOOLCHAIN_PATH
