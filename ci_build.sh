@@ -29,8 +29,12 @@ build_single_arch() {
    rm -rf $CI_TOOLCHAIN_PATH
 }
 
+pushd .
+
 ./scripts/getsources.sh
 ./scripts/hostdeps.sh
+
+popd
 
 build_single_arch arm    arm-linux-androideabi 21
 build_single_arch arm    arm-linux-androideabi 9
