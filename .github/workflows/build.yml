@@ -1,0 +1,20 @@
+name: Build GCC 13 toolchain
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build_android:
+    name: "Build"
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Perform build
+      run: ./ci_build.sh
+    - name: Upload result
+      uses: actions/upload-artifact@v7
+      with:
+        name: toolchains.zip
+        path: buildout/
