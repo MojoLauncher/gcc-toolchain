@@ -37,7 +37,7 @@ pushd .
 popd
 
 build_single_arch arm    arm-linux-androideabi 21
-build_single_arch arm    arm-linux-androideabi 9
+#build_single_arch arm    arm-linux-androideabi 9
 build_single_arch x86    i686-linux-android    21
 build_single_arch arm64  aarch64-linux-android 21
 build_single_arch x86_64 x86_64-linux-android  21
