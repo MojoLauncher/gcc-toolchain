@@ -18,3 +18,11 @@ jobs:
       with:
         name: toolchains.zip
         path: buildout/
+    - name: Update release
+      uses: softprops/action-gh-release@v3
+      if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'master'
+      with:
+          files: |
+            buildout/*
+          tag_name: prebuilt
+          overwrite_files: true
