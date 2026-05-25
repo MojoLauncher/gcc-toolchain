@@ -1,0 +1,27 @@
+diff --git a/libstdc++-v3/src/Makefile.in b/libstdc++-v3/src/Makefile.in
+index f42d957af..807df5d73 100644
+--- a/libstdc++-v3/src/Makefile.in
++++ b/libstdc++-v3/src/Makefile.in
+@@ -492,10 +492,10 @@ AM_CPPFLAGS = $(GLIBCXX_INCLUDES) $(CPPFLAGS)
+ @GLIBCXX_HOSTED_FALSE@experimental_dir = 
+ @GLIBCXX_HOSTED_TRUE@experimental_dir = experimental
+ SUBDIRS = c++98 c++11 c++17 c++20 $(filesystem_dir) $(backtrace_dir) $(experimental_dir)
+-@VTV_CYGMIN_FALSE@toolexeclib_LTLIBRARIES = libstdc++.la
++@VTV_CYGMIN_FALSE@toolexeclib_LTLIBRARIES = libgnustl13.la
+ 
+ # Cross compiler support.
+-@VTV_CYGMIN_TRUE@toolexeclib_LTLIBRARIES = libvtv.la libstdc++.la
++@VTV_CYGMIN_TRUE@toolexeclib_LTLIBRARIES = libvtv.la libgnustl13.la
+ @VTV_CYGMIN_TRUE@libvtv_la_SOURCES = vtv_stubs.cc
+ @VTV_CYGMIN_TRUE@libvtv_la_LDFLAGS = $(lt_host_flags)
+ @VTV_CYGMIN_TRUE@libvtv_la_AM_CXXFLAGS = \
+@@ -758,6 +758,9 @@ clean-toolexeclibLTLIBRARIES:
+ libstdc++.la: $(libstdc___la_OBJECTS) $(libstdc___la_DEPENDENCIES) $(EXTRA_libstdc___la_DEPENDENCIES) 
+ 	$(AM_V_GEN)$(libstdc___la_LINK) $(am_libstdc___la_rpath) $(libstdc___la_OBJECTS) $(libstdc___la_LIBADD) $(LIBS)
+ 
++libgnustl13.la: $(libstdc___la_OBJECTS) $(libstdc___la_DEPENDENCIES) $(EXTRA_libstdc___la_DEPENDENCIES) 
++        $(AM_V_GEN)$(libstdc___la_LINK) $(am_libstdc___la_rpath) $(libstdc___la_OBJECTS) $(libstdc___la_LIBADD) $(LIBS)
++
+ libvtv.la: $(libvtv_la_OBJECTS) $(libvtv_la_DEPENDENCIES) $(EXTRA_libvtv_la_DEPENDENCIES) 
+ 	$(AM_V_GEN)$(libvtv_la_LINK) $(am_libvtv_la_rpath) $(libvtv_la_OBJECTS) $(libvtv_la_LIBADD) $(LIBS)
+ 

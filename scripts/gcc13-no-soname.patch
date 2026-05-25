@@ -1,0 +1,91 @@
+diff --git a/libatomic/Makefile.am b/libatomic/Makefile.am
+index c6c8d81c5..48e7dd7ef 100644
+--- a/libatomic/Makefile.am
++++ b/libatomic/Makefile.am
+@@ -64,7 +64,7 @@ else
+ libatomic_version_script =
+ libatomic_version_dep =
+ endif
+-libatomic_version_info = -version-info $(libtool_VERSION)
++libatomic_version_info = -avoid-version
+ 
+ libatomic_la_LDFLAGS = $(libatomic_version_info) $(libatomic_version_script) $(lt_host_flags)
+ libatomic_la_SOURCES = gload.c gstore.c gcas.c gexch.c glfree.c lock.c init.c \
+diff --git a/libatomic/Makefile.in b/libatomic/Makefile.in
+index a0fa3dfc8..1e72a6333 100644
+--- a/libatomic/Makefile.in
++++ b/libatomic/Makefile.in
+@@ -416,7 +416,7 @@ noinst_LTLIBRARIES = libatomic_convenience.la
+ @LIBAT_BUILD_VERSIONED_SHLIB_FALSE@libatomic_version_dep = 
+ @LIBAT_BUILD_VERSIONED_SHLIB_GNU_TRUE@@LIBAT_BUILD_VERSIONED_SHLIB_TRUE@libatomic_version_dep = $(top_srcdir)/libatomic.map
+ @LIBAT_BUILD_VERSIONED_SHLIB_SUN_TRUE@@LIBAT_BUILD_VERSIONED_SHLIB_TRUE@libatomic_version_dep = libatomic.map-sun
+-libatomic_version_info = -version-info $(libtool_VERSION)
++libatomic_version_info = -avoid-version
+ libatomic_la_LDFLAGS = $(libatomic_version_info) $(libatomic_version_script) $(lt_host_flags)
+ libatomic_la_SOURCES = gload.c gstore.c gcas.c gexch.c glfree.c lock.c \
+ 	init.c fenv.c fence.c flag.c $(am__append_2)
+diff --git a/libgcc/config/t-slibgcc b/libgcc/config/t-slibgcc
+index 29765bce8..2bbf46d6c 100644
+--- a/libgcc/config/t-slibgcc
++++ b/libgcc/config/t-slibgcc
+@@ -21,7 +21,7 @@
+ SHLIB_EXT = .so
+ SHLIB_SOLINK = @shlib_base_name@.so
+ SHLIB_SOVERSION = 1
+-SHLIB_SONAME = @shlib_base_name@.so.$(SHLIB_SOVERSION)
++SHLIB_SONAME = @shlib_base_name@$(SHLIB_SOVERSION).so
+ SHLIB_MAP = @shlib_map_file@
+ SHLIB_OBJS = @shlib_objs@
+ SHLIB_DIR = @multilib_dir@
+diff --git a/libgomp/Makefile.am b/libgomp/Makefile.am
+index 428f7a9da..324b9b735 100644
+--- a/libgomp/Makefile.am
++++ b/libgomp/Makefile.am
+@@ -53,7 +53,7 @@ else
+ libgomp_version_script =
+ libgomp_version_dep =
+ endif
+-libgomp_version_info = -version-info $(libtool_VERSION)
++libgomp_version_info = -avoid-version
+ libgomp_la_LDFLAGS = $(libgomp_version_info) $(libgomp_version_script) \
+         $(lt_host_flags)
+ libgomp_la_LIBADD =
+diff --git a/libgomp/Makefile.in b/libgomp/Makefile.in
+index f1afb5ef5..51985082f 100644
+--- a/libgomp/Makefile.in
++++ b/libgomp/Makefile.in
+@@ -534,7 +534,7 @@ nodist_toolexeclib_HEADERS = libgomp.spec
+ @LIBGOMP_BUILD_VERSIONED_SHLIB_FALSE@libgomp_version_dep = 
+ @LIBGOMP_BUILD_VERSIONED_SHLIB_GNU_TRUE@@LIBGOMP_BUILD_VERSIONED_SHLIB_TRUE@libgomp_version_dep = libgomp.ver
+ @LIBGOMP_BUILD_VERSIONED_SHLIB_SUN_TRUE@@LIBGOMP_BUILD_VERSIONED_SHLIB_TRUE@libgomp_version_dep = libgomp.ver-sun
+-libgomp_version_info = -version-info $(libtool_VERSION)
++libgomp_version_info = -avoid-version
+ libgomp_la_LDFLAGS = $(libgomp_version_info) $(libgomp_version_script) \
+         $(lt_host_flags)
+ 
+diff --git a/libstdc++-v3/src/Makefile.am b/libstdc++-v3/src/Makefile.am
+index 5b9af41cd..49bc1cc14 100644
+--- a/libstdc++-v3/src/Makefile.am
++++ b/libstdc++-v3/src/Makefile.am
+@@ -153,7 +153,7 @@ libstdc___la_DEPENDENCIES = \
+ 	$(top_builddir)/src/c++20/libc++20convenience.la
+ 
+ libstdc___la_LDFLAGS = \
+-	-version-info $(libtool_VERSION) ${version_arg} -lm
++	-avoid-version ${version_arg} -lm
+ 
+ libstdc___la_LINK = $(CXXLINK) $(libstdc___la_LDFLAGS) $(lt_host_flags)
+ 
+diff --git a/libstdc++-v3/src/Makefile.in b/libstdc++-v3/src/Makefile.in
+index f42d957af..73da15322 100644
+--- a/libstdc++-v3/src/Makefile.in
++++ b/libstdc++-v3/src/Makefile.in
+@@ -561,7 +561,7 @@ libstdc___la_DEPENDENCIES = \
+ 	$(top_builddir)/src/c++20/libc++20convenience.la
+ 
+ libstdc___la_LDFLAGS = \
+-	-version-info $(libtool_VERSION) ${version_arg} -lm
++	-avoid-version ${version_arg} -lm
+ 
+ libstdc___la_LINK = $(CXXLINK) $(libstdc___la_LDFLAGS) $(lt_host_flags)
+ @GLIBCXX_LDBL_ALT128_COMPAT_FALSE@@GLIBCXX_LDBL_COMPAT_TRUE@LTCXXCOMPILE64 = $(LTCXXCOMPILE)
