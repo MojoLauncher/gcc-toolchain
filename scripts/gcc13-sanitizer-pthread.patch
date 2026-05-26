@@ -1,0 +1,26 @@
+diff --git a/libsanitizer/configure b/libsanitizer/configure
+index e7984f966..6e68acaff 100755
+--- a/libsanitizer/configure
++++ b/libsanitizer/configure
+@@ -15892,7 +15892,7 @@ done
+ 
+ 
+ # Common libraries that we need to link against for all sanitizer libs.
+-link_sanitizer_common='-lpthread -lm'
++link_sanitizer_common='-lm'
+ 
+ # At least for glibc, shm_open is in librt.  But don't pull that
+ # in if it still doesn't give us the function we want.  This
+diff --git a/libsanitizer/configure.ac b/libsanitizer/configure.ac
+index 04cd8910e..7c0c38240 100644
+--- a/libsanitizer/configure.ac
++++ b/libsanitizer/configure.ac
+@@ -106,7 +106,7 @@ AM_CONDITIONAL(HWASAN_SUPPORTED, [test "x$HWASAN_SUPPORTED" = "xyes"])
+ AC_CHECK_FUNCS(clock_getres clock_gettime clock_settime lstat readlink)
+ 
+ # Common libraries that we need to link against for all sanitizer libs.
+-link_sanitizer_common='-lpthread -lm'
++link_sanitizer_common='-lm'
+ 
+ # At least for glibc, shm_open is in librt.  But don't pull that
+ # in if it still doesn't give us the function we want.  This
