@@ -9,16 +9,14 @@ export TC_PATH=/tmp/toolchain-$ARCH
 export TC_SYSROOT=$TC_PATH/sysroot
 
 export BG_HOSTDEPS=/tmp/hostdeps
-# TODO: fix libsanitizer
+# TODO: fix libsanitizer, currently it doesn't build for arm and drops ld with an assert on arm64
 export ARCH_OPTS="--disable-libsanitizer"
 export ARCH_OPTS_2=""
 if [[ "$ARCH" == "arm" ]]; then
    export ARCH_OPTS="--with-float=soft --with-fpu=vfp --with-arch=armv6j --disable-libsanitizer"
    export ARCH_OPTS_2="--with-arch=armv6j"
-elif [[ "$ARCH" == "arm64" ]]; then
-   export ARCH_OPTS="--enable-libsanitizer"
 fi
-../configure --prefix=$TC_PATH --target=$TRIPLET --host=x86_64-linux-gnu --build=x86_64-linux-gnu --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --with-host-libstdcxx="-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" --disable-libssp --enable-threads --disable-nls --disable-libmudflap --disable-sjlj-exceptions --disable-tls --disable-libitm $ARCH_OPTS --enable-target-optspace --enable-initfini-array --disable-nls  --with-sysroot=$TC_SYSROOT --with-binutils-version=2.25 --with-bugurl=http://source.android.com/source/report-bugs.html --enable-languages=c,c++ --enable-default-pie --disable-bootstrap --enable-plugins --enable-libgomp --enable-gnu-indirect-function --enable-gold --enable-threads --enable-graphite=yes  --enable-eh-frame-hdr-for-static $ARCH_OPTS_2 --enable-gold=default --with-gmp=$BG_HOSTDEPS --with-mpfr=$BG_HOSTDEPS --with-mpc=$BG_HOSTDEPS --with-isl=$BG_HOSTDEPS
+../configure --prefix=$TC_PATH --target=$TRIPLET --host=x86_64-linux-gnu --build=x86_64-linux-gnu --with-gnu-as --with-gnu-ld --enable-languages=c,c++ --with-host-libstdcxx="-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" --disable-libssp --enable-threads --disable-nls --disable-libmudflap --disable-sjlj-exceptions --disable-tls --disable-libitm --disable-symvers $ARCH_OPTS --enable-target-optspace --enable-initfini-array --disable-nls  --with-sysroot=$TC_SYSROOT --with-binutils-version=2.25 --with-bugurl=http://source.android.com/source/report-bugs.html --enable-languages=c,c++ --enable-default-pie --disable-bootstrap --enable-plugins --enable-libgomp --enable-gnu-indirect-function --enable-gold --enable-threads --enable-graphite=yes  --enable-eh-frame-hdr-for-static $ARCH_OPTS_2 --enable-gold=default --with-gmp=$BG_HOSTDEPS --with-mpfr=$BG_HOSTDEPS --with-mpc=$BG_HOSTDEPS --with-isl=$BG_HOSTDEPS
 make -j16
 make install
 # gcc codegen using sincos functions.
