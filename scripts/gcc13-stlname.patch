@@ -38,3 +38,42 @@ index f42d957af..807df5d73 100644
  libvtv.la: $(libvtv_la_OBJECTS) $(libvtv_la_DEPENDENCIES) $(EXTRA_libvtv_la_DEPENDENCIES) 
  	$(AM_V_GEN)$(libvtv_la_LINK) $(am_libvtv_la_rpath) $(libvtv_la_OBJECTS) $(libvtv_la_LIBADD) $(LIBS)
  
+diff --git a/libsanitizer/configure b/libsanitizer/configure
+index e7984f966..9cdfc7574 100755
+--- a/libsanitizer/configure
++++ b/libsanitizer/configure
+@@ -4226,7 +4226,7 @@ esac
+     -I\$(top_builddir)/../libstdc++-v3/include/\$(target_noncanonical) \
+     -I\$(top_srcdir)/../libstdc++-v3/libsupc++"
+   LIBSTDCXX_RAW_CXX_LDFLAGS="\
+-    \$(top_builddir)/../libstdc++-v3/src/libstdc++.la"
++    \$(top_builddir)/../libstdc++-v3/src/libgnustl13.la"
+ 
+ 
+ 
+diff --git a/libvtv/configure b/libvtv/configure
+index e7e490d8b..357b6b509 100755
+--- a/libvtv/configure
++++ b/libvtv/configure
+@@ -2606,7 +2606,7 @@ esac
+     -I\$(top_builddir)/../libstdc++-v3/include/\$(target_noncanonical) \
+     -I\$(top_srcdir)/../libstdc++-v3/libsupc++"
+   LIBSTDCXX_RAW_CXX_LDFLAGS="\
+-    \$(top_builddir)/../libstdc++-v3/src/libstdc++.la"
++    \$(top_builddir)/../libstdc++-v3/src/libgnustl13.la"
+ 
+ 
+ 
+diff --git a/gcc/cp/g++spec.cc b/gcc/cp/g++spec.cc
+index 7584f8c22..ac9faf582 100644
+--- a/gcc/cp/g++spec.cc
++++ b/gcc/cp/g++spec.cc
+@@ -42,7 +42,7 @@ along with GCC; see the file COPYING3.  If not see
+ #endif
+ 
+ #ifndef LIBSTDCXX
+-#define LIBSTDCXX "stdc++"
++#define LIBSTDCXX "gnustl13"
+ #endif
+ #ifndef LIBSTDCXX_PROFILE
+ #define LIBSTDCXX_PROFILE LIBSTDCXX
