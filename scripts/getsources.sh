@@ -8,6 +8,7 @@ patch -p1 < ../scripts/gcc13-android-aarch64.patch
 patch -p1 < ../scripts/gcc13-no-soname.patch
 patch -p1 < ../scripts/gcc13-stlname.patch
 patch -p1 < ../scripts/gcc13-sanitizer-pthread.patch
+patch -p1 < ../scripts/gcc13-hide-locals.patch
 cd ..
 wget https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2
 tar xf isl-0.24.tar.bz2

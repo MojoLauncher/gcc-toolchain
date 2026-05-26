@@ -1,0 +1,23 @@
+diff --git a/libstdc++-v3/config/abi/pre/none.ver b/libstdc++-v3/config/abi/pre/none.ver
+index 91287008c..1f82f1578 100644
+--- a/libstdc++-v3/config/abi/pre/none.ver
++++ b/libstdc++-v3/config/abi/pre/none.ver
+@@ -5,3 +5,18 @@
+ # libstdc++-symbols.ver), then either 1) the configuration process
+ # determined that symbol versioning should not be done, or 2) you
+ # specifically turned it off. (ie, --disable-symvers).
++
++# For some dumb reason GCC includes those as global dynamic symbols when linking
++# without symvers. This causes carnage
++{
++  local:
++    __bss_start__;
++    _bss_end__;
++    _edata;
++    __bss_end__;
++    _end;
++    __end__;
++    __bss_start;
++  global:
++    *;
++};
