@@ -2,7 +2,7 @@ diff --git a/libstdc++-v3/config/abi/pre/none.ver b/libstdc++-v3/config/abi/pre/
 index 91287008c..1f82f1578 100644
 --- a/libstdc++-v3/config/abi/pre/none.ver
 +++ b/libstdc++-v3/config/abi/pre/none.ver
-@@ -5,3 +5,18 @@
+@@ -5,3 +5,16 @@
  # libstdc++-symbols.ver), then either 1) the configuration process
  # determined that symbol versioning should not be done, or 2) you
  # specifically turned it off. (ie, --disable-symvers).
@@ -18,6 +18,17 @@ index 91287008c..1f82f1578 100644
 +    _end;
 +    __end__;
 +    __bss_start;
-+  global:
-+    *;
 +};
+diff --git a/libstdc++-v3/src/Makefile.in b/libstdc++-v3/src/Makefile.in
+index f42d957af..8e7b8f7dc 100644
+--- a/libstdc++-v3/src/Makefile.in
++++ b/libstdc++-v3/src/Makefile.in
+@@ -663,7 +663,7 @@ CXXLINK = \
+ 
+ @ENABLE_SYMVERS_TRUE@CLEANFILES = libstdc++-symbols.ver $(version_dep)
+ @ENABLE_SYMVERS_DARWIN_TRUE@@ENABLE_SYMVERS_TRUE@version_arg = -Wl,-exported_symbols_list,libstdc++-symbols.explist
+-@ENABLE_SYMVERS_FALSE@version_arg = 
++@ENABLE_SYMVERS_FALSE@version_arg = -Wl,--version-script=${glibcxx_srcdir}/$(SYMVER_FILE)
+ @ENABLE_SYMVERS_GNU_NAMESPACE_TRUE@@ENABLE_SYMVERS_TRUE@version_arg = -Wl,--version-script=libstdc++-symbols.ver
+ @ENABLE_SYMVERS_GNU_TRUE@@ENABLE_SYMVERS_TRUE@version_arg = -Wl,--version-script=libstdc++-symbols.ver
+ @ENABLE_SYMVERS_SUN_TRUE@@ENABLE_SYMVERS_TRUE@version_arg = -Wl,-M,libstdc++-symbols.ver-sun
