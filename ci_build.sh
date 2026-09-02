@@ -16,15 +16,15 @@ build_single_arch() {
    export TRIPLET=$2
    export TARGET_SDK=$3
    export CI_TOOLCHAIN_PATH=/tmp/toolchain-$ARCH
-   if [[ -e gcc-13/build-gcc ]]; then
-      rm -rf gcc-13/build-gcc
+   if [[ -e gcc/build-gcc ]]; then
+      rm -rf gcc/build-gcc
    fi
 
    ./scripts/prepare_4.9_prefix.sh
-   ./scripts/build-gcc13.sh
+   ./scripts/build-gcc.sh
 
    pushd $CI_TOOLCHAIN_PATH
-      tar cJf $CI_TOOLCHAIN_OUT/gcc-13-$ARCH-$TARGET_SDK.tar.xz .
+      tar cJf $CI_TOOLCHAIN_OUT/gcc-$ARCH-$TARGET_SDK.tar.xz .
    popd
    rm -rf $CI_TOOLCHAIN_PATH
 }

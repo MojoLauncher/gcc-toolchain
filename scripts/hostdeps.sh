@@ -1,17 +1,17 @@
 #!/bin/bash
 set -e
 
-cd gmp-6.2.1/
+cd gmp-6.3.0/
 ./configure --prefix=/tmp/hostdeps/ --disable-shared --enable-static
 make -j16
 make install
 cd ..
-cd mpfr-4.2.1
+cd mpfr-4.2.2
 ./configure --prefix=/tmp/hostdeps/ --with-gmp=/tmp/hostdeps/ --disable-shared --enable-static
 make -j16
 make install
 cd ..
-cd mpc-1.3.0
+cd mpc-1.4.1
 ./configure --prefix=/tmp/hostdeps/ --with-gmp=/tmp/hostdeps/ --disable-shared --enable-static
 make -j16
 make install

@@ -2,8 +2,8 @@
 
 set -e
 
-mkdir gcc-13/build-gcc
-cd gcc-13/build-gcc
+mkdir gcc/build-gcc
+cd gcc/build-gcc
 
 export TC_PATH=/tmp/toolchain-$ARCH
 export TC_SYSROOT=$TC_PATH/sysroot
