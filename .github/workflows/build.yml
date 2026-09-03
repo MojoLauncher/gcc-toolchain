@@ -20,9 +20,9 @@ jobs:
         path: buildout/
     - name: Update release
       uses: softprops/action-gh-release@v3
-      if: github.repository_owner == 'MojoLauncher' && github.ref_name == 'master'
+      if: github.repository_owner == 'MojoLauncher' && (github.ref_name == 'master' || github.ref_name == 'exp/gcc16')
       with:
           files: |
             buildout/*
-          tag_name: prebuilt
+          tag_name: prebuilt-gcc16
           overwrite_files: true
